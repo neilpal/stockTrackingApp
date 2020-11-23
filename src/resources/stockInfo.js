@@ -1,5 +1,7 @@
 import { iex } from '../utilities/iexToken.js'
 
+
+
 export const stock = {
 
     latestPrice: (ticker, callback) => {
