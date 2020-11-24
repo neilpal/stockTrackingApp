@@ -33,13 +33,13 @@ function TickerForm() {
         
         <div className="form-group">
             <label>
-                Add a ticker:
+                Add A Stock Ticker:
                 <input className="form-control" type="text" value={value} onChange={handleChange} />
             </label>
             
         </div>
         <div className="form-group">
-            <input className="btn btn-primary" type="submit" value="Submit" />
+            <input className="btn btn-primary" type="submit" value="Add" />
         </div>
     </form>
   );

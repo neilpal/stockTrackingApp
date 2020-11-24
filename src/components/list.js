@@ -1,49 +1,41 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Row from './row.js';
 import { stock } from '../resources/stockInfo.js';
+import app from '../firebase';
+import { useAuth } from '../contexts/AuthContext.js';
 //ff3933
-
-
-class List extends Component{
+function List(){
 
     //set up a constructor
     //takes in props
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            lastTradingDate: null
-
-
-        }
-    }
-
-    componentDidMount() {
+    const [lastTradingDate, setLastTradingDate] = useState(null);
+    const { currentUser } = useAuth()
+    const [tickerList, setTicker] = useState();
+    
+    useEffect(() => {
         stock.getLastTradingDate().then((data) => {
-            this.setState({
-                lastTradingDate: data[0].date
-            })
+            setLastTradingDate(data[0].date)
         })
-    }
 
-    render(){
-        const lastTradingDate = this.state.lastTradingDate;
+        const ref = app.database().ref(`/users/${currentUser.uid}`)
+        ref.on("value", (snapshot) => {
+            const tickers = snapshot.val();
+            const tickerList = [];
+            for (let id in tickers) {
+                tickerList.push(tickers[id]);
+            }
+            setTicker(tickerList)
+        })
+    }, [])
 
-
-        return(
-            <ul className="list-group list-group-flush">
-              <Row ticker="AAPL" lastTradingDate={this.state.lastTradingDate} />
-              <Row ticker="MSFT" lastTradingDate={this.state.lastTradingDate} />
-              <Row ticker="BILL" lastTradingDate={this.state.lastTradingDate} />
-              <Row ticker="TSLA" lastTradingDate={this.state.lastTradingDate} />
-              <Row ticker="GOOG" lastTradingDate={this.state.lastTradingDate} />
-              <Row ticker="SWK" lastTradingDate={this.state.lastTradingDate} />
-              <Row ticker="GPRO" lastTradingDate={this.state.lastTradingDate} />
-              <Row ticker="BABA" lastTradingDate={this.state.lastTradingDate} />
-            </ul>
-            
-        )
-    }
+    return(
+        <ul className="list-group list-group-flush">
+            <div>{tickerList ? tickerList.map((tick, index) => <Row ticker={tick.ticker} lastTradingDate={lastTradingDate} key={index}/>) : ''}</div>
+        </ul>
+        
+    )
+    
 }
 
 export default List;
