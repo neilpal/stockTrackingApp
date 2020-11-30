@@ -1,4 +1,4 @@
-stockapptrack.com
+stocktrackapp.com
 
 Created a full-stack web application. Developed the dashboard with JavaScript/ReactJS which can fetch current stock information from IEXCloud's API. Developed the backend with firebase, which allows for users to add and delete specific information from their dashboards. Deployed to web with firebase. Click link above, sign up, and get started!
 
